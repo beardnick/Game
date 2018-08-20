@@ -1,10 +1,17 @@
 package com.example.demo.controller;
 
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PathVariable;
+import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 import javax.annotation.Resource;
 import com.example.demo.domain.User;
+import com.example.demo.reporitory.UserRepritory;
 import com.example.demo.service.UserService;
 
 import java.util.List;
@@ -17,25 +24,29 @@ public class UserController {
     @Resource
     private UserService userService;
 
+    @Autowired
+    private UserRepritory userRepritory;
 
-    @RequestMapping("/create")
+
+    @PostMapping("/create")
     public User create(@RequestParam("nickname") String nickname , @RequestParam("password") String password){
         return userService.createUser(new User(nickname, password));
     }
 
-    @RequestMapping("/edit")
+    @PostMapping("/edit")
     public User edit(User user){
+        System.out.println("user: " + user.getNickname() + user.getPassword() + user.getSex());
          return userService.editUser(user);
     }
 
-    @RequestMapping("/query")
-    public User query(User user){
-       return userService.findByIdAndPassword(user.getUid(), user.getPassword()) ;
+    @PostMapping("/login")
+    public User query(Long uid, String password){
+        return userRepritory.findUserByUidAndPassword(uid, password);
     }
 
-    @RequestMapping("/delete")
-    public void delete(User user){
-        userService.deleteUser(user);
+    @PostMapping("/delete")
+    public void delete(@RequestParam("uid") Long uid){
+        userService.deleteUser(uid);
     }
 
     @RequestMapping("/hello")
@@ -51,6 +62,11 @@ public class UserController {
     @RequestMapping("/query/users")
     public List<User>getUsers(){
         return userService.getUsers();
+    }
+
+    @RequestMapping("/query/id/{uid}")
+    public User getUser(@PathVariable("uid") Long uid){
+        return userRepritory.findUserByUid(uid);
     }
 
 }

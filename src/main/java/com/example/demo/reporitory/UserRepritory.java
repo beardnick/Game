@@ -7,4 +7,5 @@ import com.example.demo.domain.User;
 public interface UserRepritory extends JpaRepository<User, Long> {
 
     User findUserByUidAndPassword(Long uid, String password);
+    User findUserByUid(Long uid);
 }

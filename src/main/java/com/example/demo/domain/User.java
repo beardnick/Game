@@ -18,7 +18,7 @@ public class User  implements Serializable {
     private Long uid;
 
     @Column(nullable = false)
-    private String nickName;
+    private String nickname;
 
     @Column(nullable = false)
     private String password;
@@ -30,16 +30,14 @@ public class User  implements Serializable {
     private String sex;
 
     @Column(nullable = true)
-    private Long highScore;
+    private String highScore = "0";
 
     public User(String nickName, String password){
-        this.nickName = nickName;
+        this.nickname = nickName;
         this.password = password;
     }
 
-    public User(){
-
-    }
+    public User(){}
 
     public Long getUid() {
         return uid;
@@ -49,12 +47,12 @@ public class User  implements Serializable {
         this.uid = uid;
     }
 
-    public String getNickName() {
-        return nickName;
+    public String getNickname() {
+        return nickname;
     }
 
-    public void setNickName(String nickName) {
-        this.nickName = nickName;
+    public void setNickname(String nickname) {
+        this.nickname = nickname;
     }
 
     public String getAvatar() {
@@ -73,11 +71,11 @@ public class User  implements Serializable {
         this.sex = sex;
     }
 
-    public Long getHighScore() {
+    public String getHighScore() {
         return highScore;
     }
 
-    public void setHighScore(Long highScore) {
+    public void setHighScore(String highScore) {
         this.highScore = highScore;
     }
 

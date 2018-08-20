@@ -21,7 +21,7 @@ public class Round implements Serializable {
     private Long uid;
 
     @Column(nullable = false)
-    private Long score;
+    private String score;
 
     @Column(nullable = false)
     private String time;
@@ -38,11 +38,11 @@ public class Round implements Serializable {
         this.rid = rid;
     }
 
-    public Long getScore() {
+    public String getScore() {
         return score;
     }
 
-    public void setScore(Long score) {
+    public void setScore(String score) {
         this.score = score;
     }
 

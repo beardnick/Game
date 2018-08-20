@@ -26,16 +26,6 @@ public class UserServiceIml implements UserService {
     }
 
     @Override
-    public Long[] findAllScore(Long uid) {
-        ArrayList<Long> array = (ArrayList)roundReporitory.findRoundByUid(uid);
-        Long[] scores = new Long[array.size()];
-        for (int i = 0; i < scores.length ; i++) {
-           scores[i] = array.get(i);
-        }
-        return scores;
-    }
-
-    @Override
     public User createUser(User user) {
         return userRepritory.save(user);
     }
@@ -46,8 +36,8 @@ public class UserServiceIml implements UserService {
     }
 
     @Override
-    public void deleteUser(User user) {
-        userRepritory.delete(user);
+    public void deleteUser(Long uid) {
+        userRepritory.deleteById(uid);
     }
 
 

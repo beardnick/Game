@@ -10,9 +10,14 @@ import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 import javax.annotation.Resource;
+import javax.servlet.http.Cookie;
+import javax.servlet.http.HttpServletRequest;
+import javax.servlet.http.HttpServletResponse;
+
 import com.example.demo.domain.User;
 import com.example.demo.reporitory.UserRepritory;
 import com.example.demo.service.UserService;
+import com.example.demo.util.CookieUtil;
 
 import java.util.List;
 
@@ -40,8 +45,33 @@ public class UserController {
     }
 
     @PostMapping("/login")
-    public User query(Long uid, String password){
-        return userRepritory.findUserByUidAndPassword(uid, password);
+    public User query(@RequestParam(value = "uid", required = true) Long uid,
+                      @RequestParam(value = "password", required =  true) String password, HttpServletRequest request, HttpServletResponse response){
+        if(CookieUtil.get(request, "uid") != null
+                && CookieUtil.get(request, "password") != null ){
+            Long tuid = Long.valueOf(
+                    CookieUtil.get(request, "uid")
+            );
+            String tpassword = CookieUtil.get(request, "password");
+            System.out.println("cookie{uid:" + tuid +",password:" + tpassword +"}");
+            return userRepritory.findUserByUidAndPassword(tuid, tpassword);
+        }
+        if(uid != null && password != null){
+            User user = userRepritory.findUserByUidAndPassword(uid, password);
+            System.out.println("user{uid:" + uid +",password:" + password +"}");
+            if(user != null){
+                CookieUtil.set(response, "uid", String.valueOf(uid), 1000);
+                CookieUtil.set(response, "password", password , 1000);
+                return user;
+            }
+        }
+        return null;
+    }
+
+    @PostMapping("/logout")
+    public void logOut(HttpServletResponse response){
+        CookieUtil.set(response, "uid", "", 0);
+        CookieUtil.set(response, "password", "", 0);
     }
 
     @PostMapping("/delete")

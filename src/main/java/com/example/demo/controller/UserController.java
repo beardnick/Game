@@ -18,11 +18,9 @@ import com.example.demo.reporitory.UserRepritory;
 import com.example.demo.service.UserService;
 import com.example.demo.util.CookieUtil;
 import com.example.demo.util.ResponseUtil;
-import com.sun.xml.internal.ws.policy.privateutil.PolicyUtils;
-
 import java.io.File;
 import java.io.IOException;
-import java.nio.file.Path;
+import java.net.MalformedURLException;
 import java.util.List;
 
 //all the data return as json
@@ -151,11 +149,18 @@ public class UserController {
                    "上传失败"
             );
         }
+        String url = null;
+        try {
+            url = severFile.toURL().toString();
+        } catch (MalformedURLException e) {
+            e.printStackTrace();
+        }
         return ResponseUtil.result(
-                severFile.getPath(),
+                url,
                 100,
                 "上传成功"
         );
+
     }
 
 

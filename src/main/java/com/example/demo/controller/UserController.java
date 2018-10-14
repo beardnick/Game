@@ -55,26 +55,24 @@ public class UserController {
     }
 
     @PostMapping("/login")
-    public Response query(@RequestParam(value = "uid", required = false) Long uid,
+    public Response query(@RequestParam(value = "nickname", required = false) String name,
                           @RequestParam(value = "password", required =  false) String password, HttpServletRequest request, HttpServletResponse response){
-        if(CookieUtil.get(request, "uid") != null
+        if(CookieUtil.get(request, "name") != null
                 && CookieUtil.get(request, "password") != null ){
-            Long tuid = Long.valueOf(
-                    CookieUtil.get(request, "uid")
-            );
+            String tname = CookieUtil.get(request, "name");
             String tpassword = CookieUtil.get(request, "password");
-            System.out.println("cookie{uid:" + tuid +",password:" + tpassword +"}");
+            System.out.println("cookie{name:" + tname  +",password:" + tpassword +"}");
             return ResponseUtil.result(userRepritory
-                    .findUserByUidAndPassword(tuid, tpassword),
+                    .findUserByNicknameAndPassword(tname, tpassword),
                     100,
                     "登录成功"
             );
         }
-        if(uid != null && password != null){
-            User user = userRepritory.findUserByUidAndPassword(uid, password);
-            System.out.println("user{uid:" + uid +",password:" + password +"}");
+        if(name != null && password != null){
+            User user = userRepritory.findUserByNicknameAndPassword(name, password);
+            System.out.println("user{name:" + name +",password:" + password +"}");
             if(user != null){
-                CookieUtil.set(response, "uid", String.valueOf(uid), 1000);
+                CookieUtil.set(response, "name", String.valueOf(name), 1000);
                 CookieUtil.set(response, "password", password , 1000);
                 return ResponseUtil.result(
                         user,
@@ -89,7 +87,7 @@ public class UserController {
 
     @PostMapping("/logout")
     public void logOut(HttpServletResponse response){
-        CookieUtil.set(response, "uid", "", 0);
+        CookieUtil.set(response, "name", "", 0);
         CookieUtil.set(response, "password", "", 0);
     }
 
@@ -132,9 +130,7 @@ public class UserController {
         if(file.isEmpty()){
             return ResponseUtil.result(200, "文件为空");
         }
-        String path = request
-                .getServletContext()
-                .getRealPath("/") + "avatar/";
+        String path = "/data/avatar/";
         File severFile = new File(path + file.getOriginalFilename());
         File dir = new File(path);
         try {
@@ -149,14 +145,8 @@ public class UserController {
                    "上传失败"
             );
         }
-        String url = null;
-        try {
-            url = severFile.toURL().toString();
-        } catch (MalformedURLException e) {
-            e.printStackTrace();
-        }
         return ResponseUtil.result(
-                url,
+                "123.207.19.172/file/avatar/"+file.getOriginalFilename(),
                 100,
                 "上传成功"
         );

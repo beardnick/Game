@@ -2,7 +2,6 @@ package com.example.demo.service.iml;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
-import java.util.ArrayList;
 import java.util.List;
 
 import com.example.demo.domain.User;
@@ -32,7 +31,11 @@ public class UserServiceIml implements UserService {
 
     @Override
     public User editUser(User user) {
-        return userRepritory.save(user);
+        if(userRepritory.findUserByUid(user.getUid()) != null) {
+            return userRepritory.save(user);
+        }else{
+            return null;
+        }
     }
 
     @Override

@@ -46,12 +46,16 @@ public class UserController {
 
     @PostMapping("/edit")
     public Response edit(User user){
-        System.out.println("user: " + user.getNickname() + user.getPassword() + user.getSex());
-         return ResponseUtil.result(
-                 userService.editUser(user),
-                 100,
-                 "修改成功"
-                 );
+//        System.out.println("user: " + user.getNickname() + user.getPassword() + user.getSex());
+//         return ResponseUtil.result(
+//                 userService.editUser(user),
+//                 100,
+//                 "修改成功"
+//                 );
+        User res = userService.editUser(user);
+        return res == null
+                ? ResponseUtil.result(200, "uid为" + user.getUid() + "的用户不存在")
+                : ResponseUtil.result(res, 100, "修改成功");
     }
 
     @PostMapping("/login")
@@ -84,6 +88,37 @@ public class UserController {
         }
         return ResponseUtil.result(200, "未输入账号和密码");
     }
+
+//    @PostMapping("/login")
+//    public Response query(@RequestParam(value = "uid", required = false) Long uid,
+//                          @RequestParam(value = "password", required =  false) String password, HttpServletRequest request, HttpServletResponse response) {
+//        if (CookieUtil.get(request, "uid") != null
+//                && CookieUtil.get(request, "password") != null) {
+//            Long tuid = Long.valueOf(
+//                    CookieUtil.get(request, "uid")
+//            );
+//            String tpassword = CookieUtil.get(request, "password");
+//            System.out.println("cookie{uid:" + tuid + ",password:" + tpassword + "}");
+//            return ResponseUtil.result(userRepritory
+//                            .findUserByUidAndPassword(tuid, tpassword),
+//                    100,
+//                    "登录成功"
+//            );
+//        }
+//        if (uid != null && password != null) {
+//            User user = userRepritory.findUserByUidAndPassword(uid, password);
+//            System.out.println("user{uid:" + uid + ",password:" + password + "}");
+//            if (user != null) {
+//                CookieUtil.set(response, "uid", String.valueOf(uid), 1000);
+//                CookieUtil.set(response, "password", password, 1000);
+//                return ResponseUtil.result(
+//                        user,
+//                        200,
+//                        "未输入账号或密码");
+//            }
+//        }
+//    }
+
 
     @PostMapping("/logout")
     public void logOut(HttpServletResponse response){

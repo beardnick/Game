@@ -24,4 +24,10 @@ public class StringUtil {
         return - ascend(s1, s2);
     }
 
+    public static String upper(String s){
+        char[] chars = s.toCharArray();
+        chars[0] -= 32;
+        return String.valueOf(chars);
+    }
+
 }

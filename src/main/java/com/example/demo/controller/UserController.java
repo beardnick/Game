@@ -157,6 +157,21 @@ public class UserController {
         );
     }
 
+
+    @RequestMapping("/nickname/{nickname}")
+    public Response getUser(@PathVariable("nickname")String name) {
+//        return ResponseUtil.result(
+//                userRepritory.findUserByUid(uid),
+//                100,
+//                "success"
+//        );
+        User user = userRepritory.findUserByNickname(name);
+        return user != null
+                ? ResponseUtil.result(user,100,"success")
+                : ResponseUtil.result(200,"没有找到昵称为" + name + "的用户");
+
+    }
+
     //    @RequestMapping("/uid/{id}/edit/avatar")
     @RequestMapping("/upload/avatar")
     public Response editAvatar(

@@ -59,11 +59,38 @@ public class RoundController {
     }
 
     // TODO: 18-8-20 use sql to replace it
+//    @RequestMapping("/rank")
+//    public Response rankList(Integer number){
+//        if(number == null){
+//            number = 50;
+//        }
+//        ArrayList<User> users = (ArrayList<User>)userRepritory.findAll();
+//        users.sort(new Comparator<User>() {
+//            @Override
+//            public int compare(User o1, User o2) {
+//                return StringUtil.descend(o1.getHighScore(), o2.getHighScore());
+//            }
+//        });
+//
+//        System.out.println("/rank: " + users);
+//        return ResponseUtil.result(users.size() > number
+//        ? users.subList(0, number) : users,
+//                100,
+//                "success"
+//
+//                );
+//    }
+
+
     @RequestMapping("/rank")
-    public Response rankList(Integer number){
+    public Response rankList(Integer startPoint, Integer number){
+        if(startPoint == null){
+            startPoint = 0;
+        }
         if(number == null){
             number = 50;
         }
+//        System.out.println(startPoint + " to " + (startPoint + number));
         ArrayList<User> users = (ArrayList<User>)userRepritory.findAll();
         users.sort(new Comparator<User>() {
             @Override
@@ -73,13 +100,12 @@ public class RoundController {
         });
 
         System.out.println("/rank: " + users);
-        return ResponseUtil.result(users.size() > number
-        ? users.subList(0, number) : users,
+        return ResponseUtil.result(users.size() > startPoint +  number
+        ? users.subList(startPoint,  startPoint + number) : users.subList(startPoint, users.size()),
                 100,
                 "success"
 
                 );
     }
-
 
 }
